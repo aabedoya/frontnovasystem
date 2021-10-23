@@ -5,12 +5,17 @@ const baseURL = 'https://enigmatic-shelf-42481.herokuapp.com';
 
 const getToken = () => {
   return `Bearer ${localStorage.getItem('token')}`;
+  
 };
 
-export const obtenerVehiculos = async (successCallback, errorCallback) => {
+export const obtenerProductos = async (successCallback, errorCallback) => {
   const options = {
     method: 'GET',
+<<<<<<< HEAD
     url: `${baseURL}/vehiculos/`,
+=======
+    url: 'http://localhost:5000/productos/',
+>>>>>>> front
     headers: {
       Authorization: getToken(),
     },
@@ -18,30 +23,42 @@ export const obtenerVehiculos = async (successCallback, errorCallback) => {
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
-export const crearVehiculo = async (data, successCallback, errorCallback) => {
+export const crearProducto = async (data, successCallback, errorCallback) => {
   const options = {
     method: 'POST',
+<<<<<<< HEAD
     url: `${baseURL}/vehiculos/`,
+=======
+    url: 'http://localhost:5000/productos/',
+>>>>>>> front
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
-export const editarVehiculo = async (id, data, successCallback, errorCallback) => {
+export const editarProducto = async (id, data, successCallback, errorCallback) => {
   const options = {
     method: 'PATCH',
+<<<<<<< HEAD
     url: `${baseURL}/vehiculos/${id}/`,
+=======
+    url: `http://localhost:5000/productos/${id}/`,
+>>>>>>> front
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
-export const eliminarVehiculo = async (id, successCallback, errorCallback) => {
+export const eliminarProducto = async (id, successCallback, errorCallback) => {
   const options = {
     method: 'DELETE',
+<<<<<<< HEAD
     url: `${baseURL}/vehiculos/${id}/`,
+=======
+    url: `http://localhost:5000/productos/${id}/`,
+>>>>>>> front
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
@@ -68,6 +85,7 @@ export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
       Authorization: getToken(), // 3. enviarle el token a backend
     },
   };
+  console.log('obtiene datos del user');
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 

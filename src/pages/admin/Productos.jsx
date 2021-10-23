@@ -2,26 +2,26 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
 import { Dialog, Tooltip } from '@material-ui/core';
-import { obtenerVehiculos, crearVehiculo, editarVehiculo, eliminarVehiculo } from 'utils/api';
+import { obtenerProductos, crearProducto, editarProducto, eliminarProducto } from 'utils/api';
 import ReactLoading from 'react-loading';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateComponent from 'components/PrivateComponent';
 
-const Vehiculos = () => {
+const Productos = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
-  const [vehiculos, setVehiculos] = useState([]);
-  const [textoBoton, setTextoBoton] = useState('Crear Nuevo Vehículo');
-  const [colorBoton, setColorBoton] = useState('indigo');
+  const [productos, setProductos] = useState([]);
+  const [textoBoton, setTextoBoton] = useState('Crear Nuevo Producto');
+  const [colorBoton, setColorBoton] = useState('blue');
   const [ejecutarConsulta, setEjecutarConsulta] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchVehiculos = async () => {
+    const fetchProductos = async () => {
       setLoading(true);
-      await obtenerVehiculos(
+      await obtenerProductos(
         (response) => {
           console.log('la respuesta que se recibio fue', response);
-          setVehiculos(response.data);
+          setProductos(response.data);
           setEjecutarConsulta(false);
           setLoading(false);
         },
@@ -33,12 +33,12 @@ const Vehiculos = () => {
     };
     console.log('consulta', ejecutarConsulta);
     if (ejecutarConsulta) {
-      fetchVehiculos();
+      fetchProductos();
     }
   }, [ejecutarConsulta]);
 
   useEffect(() => {
-    //obtener lista de vehículos desde el backend
+    //obtener lista de Productos desde el backend
     if (mostrarTabla) {
       setEjecutarConsulta(true);
     }
@@ -46,18 +46,18 @@ const Vehiculos = () => {
 
   useEffect(() => {
     if (mostrarTabla) {
-      setTextoBoton('Crear Nuevo Vehículo');
-      setColorBoton('indigo');
+      setTextoBoton('Crear Nuevo Producto');
+      setColorBoton('blue');
     } else {
-      setTextoBoton('Mostrar Todos los vehículos');
-      setColorBoton('green');
+      setTextoBoton('Mostrar Todos los Productos');
+      setColorBoton('blue');
     }
   }, [mostrarTabla]);
   return (
     <div className='flex h-full w-full flex-col items-center justify-start p-8'>
       <div className='flex flex-col w-full'>
         <h2 className='text-3xl font-extrabold text-gray-900'>
-          Página de administración de vehículos
+          Página de administración de Productos
         </h2>
         <button
           onClick={() => {
@@ -70,16 +70,16 @@ const Vehiculos = () => {
       </div>
 
       {mostrarTabla ? (
-        <TablaVehiculos
+        <TablaProductos
           loading={loading}
-          listaVehiculos={vehiculos}
+          listaProductos={productos}
           setEjecutarConsulta={setEjecutarConsulta}
         />
       ) : (
-        <FormularioCreacionVehiculos
+        <FormularioCreacionProductos
           setMostrarTabla={setMostrarTabla}
-          listaVehiculos={vehiculos}
-          setVehiculos={setVehiculos}
+          listaProductos={productos}
+          setProductos={setProductos}
         />
       )}
       <ToastContainer position='bottom-center' autoClose={5000} />
@@ -87,17 +87,17 @@ const Vehiculos = () => {
   );
 };
 
-const TablaVehiculos = ({ loading, listaVehiculos, setEjecutarConsulta }) => {
+const TablaProductos = ({ loading, listaProductos, setEjecutarConsulta }) => {
   const [busqueda, setBusqueda] = useState('');
-  const [vehiculosFiltrados, setVehiculosFiltrados] = useState(listaVehiculos);
+  const [productosFiltrados, setProductosFiltrados] = useState(listaProductos);
 
   useEffect(() => {
-    setVehiculosFiltrados(
-      listaVehiculos.filter((elemento) => {
+    setProductosFiltrados(
+      listaProductos.filter((elemento) => {
         return JSON.stringify(elemento).toLowerCase().includes(busqueda.toLowerCase());
       })
     );
-  }, [busqueda, listaVehiculos]);
+  }, [busqueda, listaProductos]);
 
   return (
     <div className='flex flex-col items-center justify-center w-full'>
@@ -105,9 +105,9 @@ const TablaVehiculos = ({ loading, listaVehiculos, setEjecutarConsulta }) => {
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
         placeholder='Buscar'
-        className='border-2 border-gray-700 px-3 py-1 self-start rounded-md focus:outline-none focus:border-indigo-500'
+        className='border-2 border-gray-700 px-3 py-1 self-start rounded-md focus:outline-none focus:border-blue-500'
       />
-      <h2 className='text-2xl font-extrabold text-gray-800'>Todos los vehículos</h2>
+      <h2 className='text-2xl font-extrabold text-gray-800'>Todos los Productos</h2>
       <div className='hidden md:flex w-full'>
         {loading ? (
           <ReactLoading type='cylon' color='#abc123' height={667} width={375} />
@@ -116,20 +116,20 @@ const TablaVehiculos = ({ loading, listaVehiculos, setEjecutarConsulta }) => {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Nombre del vehículo</th>
-                <th>Marca del vehículo</th>
-                <th>Modelo del vehículo</th>
+                <th>Descripción del Producto</th>
+                <th>Valor del Producto</th>
+                <th>Estado del Producto</th>
                 <PrivateComponent roleList={['admin']}>
                   <th>Acciones</th>
                 </PrivateComponent>
               </tr>
             </thead>
             <tbody>
-              {vehiculosFiltrados.map((vehiculo) => {
+              {productosFiltrados.map((producto) => {
                 return (
-                  <FilaVehiculo
+                  <FilaProducto
                     key={nanoid()}
-                    vehiculo={vehiculo}
+                    producto={producto}
                     setEjecutarConsulta={setEjecutarConsulta}
                   />
                 );
@@ -139,12 +139,12 @@ const TablaVehiculos = ({ loading, listaVehiculos, setEjecutarConsulta }) => {
         )}
       </div>
       <div className='flex flex-col w-full m-2 md:hidden'>
-        {vehiculosFiltrados.map((el) => {
+        {productosFiltrados.map((el) => {
           return (
             <div className='bg-gray-400 m-2 shadow-xl flex flex-col p-2 rounded-xl'>
-              <span>{el.name}</span>
-              <span>{el.brand}</span>
-              <span>{el.model}</span>
+              <span>{el.descripcion}</span>
+              <span>{el.valor}</span>
+              <span>{el.estado}</span>
             </div>
           );
         })}
@@ -153,50 +153,50 @@ const TablaVehiculos = ({ loading, listaVehiculos, setEjecutarConsulta }) => {
   );
 };
 
-const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
+const FilaProducto = ({ producto, setEjecutarConsulta }) => {
   const [edit, setEdit] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [infoNuevoVehiculo, setInfoNuevoVehiculo] = useState({
-    _id: vehiculo._id,
-    name: vehiculo.name,
-    brand: vehiculo.brand,
-    model: vehiculo.model,
+  const [infoNuevoProducto, setInfoNuevoProducto] = useState({
+    _id: producto._id,
+    descripcion: producto.descripcion,
+    valor: producto.valor,
+    estado: producto.estado,
   });
 
-  const actualizarVehiculo = async () => {
+  const actualizarProducto = async () => {
     //enviar la info al backend
 
-    await editarVehiculo(
-      vehiculo._id,
+    await editarProducto(
+      producto._id,
       {
-        name: infoNuevoVehiculo.name,
-        brand: infoNuevoVehiculo.brand,
-        model: infoNuevoVehiculo.model,
+        descripcion: infoNuevoProducto.descripcion,
+        valor: infoNuevoProducto.valor,
+        estado: infoNuevoProducto.estado,
       },
       (response) => {
         console.log(response.data);
-        toast.success('Vehículo modificado con éxito');
+        toast.success('Producto modificado con éxito');
         setEdit(false);
         setEjecutarConsulta(true);
       },
       (error) => {
-        toast.error('Error modificando el vehículo');
+        toast.error('Error modificando el Producto');
         console.error(error);
       }
     );
   };
 
-  const deleteVehicle = async () => {
-    await eliminarVehiculo(
-      vehiculo._id,
+  const borrarProducto = async () => {
+    await eliminarProducto(
+      producto._id,
       (response) => {
         console.log(response.data);
-        toast.success('vehículo eliminado con éxito');
+        toast.success('Producto eliminado con éxito');
         setEjecutarConsulta(true);
       },
       (error) => {
         console.error(error);
-        toast.error('Error eliminando el vehículo');
+        toast.error('Error eliminando el Producto');
       }
     );
 
@@ -207,22 +207,22 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
     <tr>
       {edit ? (
         <>
-          <td>{infoNuevoVehiculo._id}</td>
+          <td>{infoNuevoProducto._id}</td>
           <td>
             <input
               className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
               type='text'
-              value={infoNuevoVehiculo.name}
-              onChange={(e) => setInfoNuevoVehiculo({ ...infoNuevoVehiculo, name: e.target.value })}
+              value={infoNuevoProducto.descripcion}
+              onChange={(e) => setInfoNuevoProducto({ ...infoNuevoProducto, descripcion: e.target.value })}
             />
           </td>
           <td>
             <input
               className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
               type='text'
-              value={infoNuevoVehiculo.brand}
+              value={infoNuevoProducto.valor}
               onChange={(e) =>
-                setInfoNuevoVehiculo({ ...infoNuevoVehiculo, brand: e.target.value })
+                setInfoNuevoProducto({ ...infoNuevoProducto, valor: e.target.value })
               }
             />
           </td>
@@ -230,19 +230,19 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
             <input
               className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
               type='text'
-              value={infoNuevoVehiculo.model}
+              value={infoNuevoProducto.estado}
               onChange={(e) =>
-                setInfoNuevoVehiculo({ ...infoNuevoVehiculo, model: e.target.value })
+                setInfoNuevoProducto({ ...infoNuevoProducto, estado: e.target.value })
               }
             />
           </td>
         </>
       ) : (
         <>
-          <td>{vehiculo._id.slice(20)}</td>
-          <td>{vehiculo.name}</td>
-          <td>{vehiculo.brand}</td>
-          <td>{vehiculo.model}</td>
+          <td>{producto._id.slice(20)}</td>
+          <td>{producto.descripcion}</td>
+          <td>{producto.valor}</td>
+          <td>{producto.estado}</td>
         </>
       )}
 
@@ -253,8 +253,8 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
               <>
                 <Tooltip title='Confirmar Edición' arrow>
                   <i
-                    onClick={() => actualizarVehiculo()}
-                    className='fas fa-check text-green-700 hover:text-green-500'
+                    onClick={() => actualizarProducto()}
+                    className='fas fa-check text-blue-700 hover:text-blue-500'
                   />
                 </Tooltip>
                 <Tooltip title='Cancelar edición' arrow>
@@ -266,13 +266,13 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
               </>
             ) : (
               <>
-                <Tooltip title='Editar Vehículo' arrow>
+                <Tooltip title='Editar Producto' arrow>
                   <i
                     onClick={() => setEdit(!edit)}
                     className='fas fa-pencil-alt text-yellow-700 hover:text-yellow-500'
                   />
                 </Tooltip>
-                <Tooltip title='Eliminar Vehículo' arrow>
+                <Tooltip title='Eliminar Producto' arrow>
                   <i
                     onClick={() => setOpenDialog(true)}
                     className='fas fa-trash text-red-700 hover:text-red-500'
@@ -285,12 +285,12 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
           <Dialog open={openDialog}>
             <div className='p-8 flex flex-col'>
               <h1 className='text-gray-900 text-2xl font-bold'>
-                ¿Está seguro de querer eliminar el vehículo?
+                ¿Está seguro de querer eliminar el Producto?
               </h1>
               <div className='flex w-full items-center justify-center my-4'>
                 <button
-                  onClick={() => deleteVehicle()}
-                  className='mx-2 px-4 py-2 bg-green-500 text-white hover:bg-green-700 rounded-md shadow-md'
+                  onClick={() => borrarProducto()}
+                  className='mx-2 px-4 py-2 bg-blue-500 text-white hover:bg-blue-700 rounded-md shadow-md'
                 >
                   Sí
                 </button>
@@ -309,50 +309,50 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
   );
 };
 
-const FormularioCreacionVehiculos = ({ setMostrarTabla, listaVehiculos, setVehiculos }) => {
+const FormularioCreacionProductos = ({ setMostrarTabla, listaProductos, setProductos }) => {
   const form = useRef(null);
 
   const submitForm = async (e) => {
     e.preventDefault();
     const fd = new FormData(form.current);
 
-    const nuevoVehiculo = {};
+    const nuevoProducto = {};
     fd.forEach((value, key) => {
-      nuevoVehiculo[key] = value;
+      nuevoProducto[key] = value;
     });
 
-    await crearVehiculo(
+    await crearProducto(
       {
-        name: nuevoVehiculo.name,
-        brand: nuevoVehiculo.brand,
-        model: nuevoVehiculo.model,
+        descripcion: nuevoProducto.descripcion,
+        valor: nuevoProducto.valor,
+        estado: nuevoProducto.estado,
       },
       (response) => {
         console.log(response.data);
-        toast.success('Vehículo agregado con éxito');
+        toast.success('Producto agregado con éxito');
       },
       (error) => {
         console.error(error);
-        toast.error('Error creando un vehículo');
+        toast.error('Error creando un Producto');
       }
     );
 
     // const options = {
     //   method: 'POST',
-    //   url: 'http://localhost:5000/vehiculos/nuevo/',
+    //   url: 'http://localhost:5000/productos/nuevo/',
     //   headers: { 'Content-Type': 'application/json' },
-    //   data: { name: nuevoVehiculo.name, brand: nuevoVehiculo.brand, model: nuevoVehiculo.model },
+    //   data: { descripcion: nuevoProducto.descripcion, valor: nuevoProducto.valor, estado: nuevoProducto.estado },
     // };
 
     // await axios
     //   .request(options)
     //   .then(function (response) {
     //     console.log(response.data);
-    //     toast.success('Vehículo agregado con éxito');
+    //     toast.success('Producto agregado con éxito');
     //   })
     //   .catch(function (error) {
     //     console.error(error);
-    //     toast.error('Error creando un vehículo');
+    //     toast.error('Error creando un Producto');
     //   });
 
     setMostrarTabla(true);
@@ -360,58 +360,54 @@ const FormularioCreacionVehiculos = ({ setMostrarTabla, listaVehiculos, setVehic
 
   return (
     <div className='flex flex-col items-center justify-center'>
-      <h2 className='text-2xl font-extrabold text-gray-800'>Crear nuevo vehículo</h2>
+      <h2 className='text-2xl font-extrabold text-gray-800'>Crear nuevo Producto</h2>
       <form ref={form} onSubmit={submitForm} className='flex flex-col'>
         <label className='flex flex-col' htmlFor='nombre'>
-          Nombre del vehículo
+          Descripción del Producto
           <input
-            name='name'
+            name='descripcion'
             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
             type='text'
-            placeholder='Corolla'
+            placeholder='Ingrese aquí la descripción'
             required
           />
         </label>
         <label className='flex flex-col' htmlFor='marca'>
-          Marca del vehículo
+          Estado del Producto
           <select
             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-            name='brand'
+            name='estado'
             required
             defaultValue={0}
           >
             <option disabled value={0}>
               Seleccione una opción
             </option>
-            <option>Renault</option>
-            <option>Toyota</option>
-            <option>Ford</option>
-            <option>Mazda</option>
-            <option>Chevrolet</option>
+            <option>Disponible</option>
+            <option>No disponible</option>
+            
           </select>
         </label>
         <label className='flex flex-col' htmlFor='modelo'>
-          Modelo del vehículo
+          Valor del Producto
           <input
-            name='model'
+            name='valor'
             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-            type='number'
-            min={1992}
-            max={2022}
-            placeholder='2014'
+            type='integer'
+            placeholder='Ingrese el valor unitario'
             required
           />
         </label>
 
         <button
           type='submit'
-          className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'
+          className='col-span-2 bg-blue-400 p-2 rounded-full shadow-md hover:bg-blue-600 text-white'
         >
-          Guardar vehiculo
+          Guardar producto
         </button>
       </form>
     </div>
   );
 };
 
-export default Vehiculos;
+export default Productos;

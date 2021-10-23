@@ -22,13 +22,19 @@ const PrivateLayout = ({ children }) => {
       // }
 
       // 1. pedir token a auth0
+      console.log('Prueba 1');
+      
+      
       setLoadingUserInformation(true);
-      const accessToken = await getAccessTokenSilently({
-        audience: `api-autenticacion-concesionario-mintic`,
+      
+        const accessToken = await getAccessTokenSilently({
+        audience: 'https://misiontic-nova.us.auth0.com/api/v2/',
       });
+      
+      
       // 2. recibir token de auth0
       localStorage.setItem('token', accessToken);
-      console.log(accessToken);
+      console.log('Nombre acces token',accessToken);
       // 3. enviarle el token a el backend
       await obtenerDatosUsuario(
         (response) => {

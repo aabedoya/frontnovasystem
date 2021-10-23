@@ -3,7 +3,7 @@ import PrivateLayout from 'layouts/PrivateLayout';
 import PublicLayout from 'layouts/PublicLayout';
 import Index from 'pages/Index';
 import Admin from 'pages/admin/Index';
-import Vehiculos from 'pages/admin/Vehiculos';
+import Productos from 'pages/admin/Productos';
 import Login from 'pages/auth/Login';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import 'styles/styles.css';
@@ -22,25 +22,32 @@ function App() {
   useEffect(() => {
     console.log('modo dark:', darkMode);
   }, [darkMode]);
-
+ 
   return (
     <Auth0Provider
+<<<<<<< HEAD
       domain='misiontic-concesionario.us.auth0.com'
       clientId='WsdhjjQzDLIZEHA6ouuxXGxFONFGAQ4g'
       redirectUri='https://intense-brook-01822.herokuapp.com/admin'
       audience='api-autenticacion-concesionario-mintic'
+=======
+      domain='misiontic-nova.us.auth0.com'
+      clientId='YjfQiSQi7MyEp5ERNG7gMuCoOb3SGI5P'
+      redirectUri='http://localhost:3000/admin'
+      audience='https://misiontic-nova.us.auth0.com/api/v2/'
+>>>>>>> front
     >
       <div className='App'>
         <UserContext.Provider value={{ userData, setUserData }}>
           <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
             <Router>
               <Switch>
-                <Route path={['/admin', '/admin/vehiculos', '/admin/ventas', '/admin/usuarios']}>
+                <Route path={['/admin', '/admin/productos', '/admin/ventas', '/admin/usuarios']}>
                   <PrivateLayout>
                     <Switch>
-                      <Route path='/admin/vehiculos'>
+                      <Route path='/admin/productos'>
                         <PrivateRoute roleList={['admin']}>
-                          <Vehiculos />
+                          <Productos />
                         </PrivateRoute>
                       </Route>
                       <Route path='/admin/ventas'>

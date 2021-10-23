@@ -3,7 +3,8 @@ import { nanoid } from 'nanoid';
 import React, { useState, useEffect } from 'react';
 import { editarUsuario } from 'utils/api';
 import { obtenerUsuarios } from 'utils/api';
-
+ 
+ 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
 
@@ -25,7 +26,7 @@ const Usuarios = () => {
   return (
     <div>
       <div>admin usuarios</div>
-      <PrivateComponent roleList={['admin']}>
+      <PrivateComponent roleList={['admin','vendedor']}>
         <button className='bg-red-400'>Hola RBAC</button>
       </PrivateComponent>
       <table className='tabla'>
