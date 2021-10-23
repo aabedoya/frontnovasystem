@@ -22,12 +22,8 @@ const PrivateLayout = ({ children }) => {
       // }
 
       // 1. pedir token a auth0
-      console.log('Prueba 1');
-      
-      
       setLoadingUserInformation(true);
-      
-        const accessToken = await getAccessTokenSilently({
+      const accessToken = await getAccessTokenSilently({
         audience: 'https://misiontic-nova.us.auth0.com/api/v2/',
       });
       
