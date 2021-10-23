@@ -25,7 +25,7 @@ function App() {
  
   return (
     <Auth0Provider
-      domain='https://misiontic-nova.us.auth0.com/'
+      domain='misiontic-nova.us.auth0.com'
       clientId='YjfQiSQi7MyEp5ERNG7gMuCoOb3SGI5P'
       redirectUri='https://infinite-forest-27321.herokuapp.com/admin'
       audience='https://misiontic-nova.us.auth0.com/api/v2/'
