@@ -53,9 +53,9 @@ const PrivateLayout = ({ children }) => {
   if (isLoading || loadingUserInformation)
     return <ReactLoading type='cylon' color='#abc123' height={667} width={375} />;
 
-  if (!isAuthenticated) {
-    return loginWithRedirect();
-  }
+  //if (!isAuthenticated) {
+  //  return loginWithRedirect();
+  //}
 
   return (
     <div className='flex w-screen h-screen'>
