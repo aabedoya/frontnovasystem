@@ -25,17 +25,10 @@ function App() {
  
   return (
     <Auth0Provider
-<<<<<<< HEAD
-      domain='misiontic-concesionario.us.auth0.com'
-      clientId='WsdhjjQzDLIZEHA6ouuxXGxFONFGAQ4g'
-      redirectUri='https://intense-brook-01822.herokuapp.com/admin'
-      audience='api-autenticacion-concesionario-mintic'
-=======
       domain='misiontic-nova.us.auth0.com'
       clientId='YjfQiSQi7MyEp5ERNG7gMuCoOb3SGI5P'
       redirectUri='http://localhost:3000/admin'
       audience='https://misiontic-nova.us.auth0.com/api/v2/'
->>>>>>> front
     >
       <div className='App'>
         <UserContext.Provider value={{ userData, setUserData }}>
