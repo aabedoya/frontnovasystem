@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { crearVenta } from 'utils/api';
 import { obtenerProductos } from 'utils/api';
 import { obtenerUsuarios } from 'utils/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // const Ventas = () => {
 //   const form = useRef(null);
@@ -133,20 +135,26 @@ const Ventas = () => {
         return null;
       })
       .filter((v) => v);
+    
+    
 
     const datosVenta = {
       vendedor: vendedores.filter((v) => v._id === formData.vendedor)[0],
       cantidad: formData.valor,
       productos: listaProductos,
+      
     };
 
     await crearVenta(
       datosVenta,
       (response) => {
-        console.log(response);
+        console.log(response.data);
+        toast.success('Venta agregada con éxito');
+        window.location.reload(false);
       },
       (error) => {
         console.error(error);
+        toast.error('Error creando la Venta');
       }
     );
   };
@@ -173,15 +181,7 @@ const Ventas = () => {
           setProductosTabla={setProductosTabla}
         />
 
-        <label className='flex flex-col'>
-          <span className='text-2xl font-gray-900'>Valor Total Venta</span>
-          <label
-            className='bg-gray-50 border border-gray-400 p-5 rounded-lg m-5'
-            type='float'
-            name='valor'
-            required
-          />
-        </label>
+        
         <button
           type='submit'
           className='col-span-2 bg-blue-400 p-2 rounded-full shadow-md hover:bg-blue-600 text-white'
@@ -189,6 +189,7 @@ const Ventas = () => {
           Crear Venta
         </button>
       </form>
+      <ToastContainer position='bottom-center' autoClose={5000} />
     </div>
   );
 };
@@ -196,7 +197,7 @@ const Ventas = () => {
 const TablaProductos = ({ productos, setProductos, setProductosTabla }) => {
   const [productoAAgregar, setProductoAAgregar] = useState({});
   const [filasTabla, setFilasTabla] = useState([]);
-
+  const [totalVentas,setTotalVentas] = useState(0);
   useEffect(() => {
     setProductosTabla(filasTabla);
   }, [filasTabla, setProductosTabla]);
@@ -216,7 +217,7 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla }) => {
     console.log(producto,cantidad);
     setFilasTabla(
       filasTabla.map((ft) => {
-        if (ft._id === producto.id) {
+        if (ft._id === producto._id) {
           ft.cantidad = cantidad;
           ft.total = producto.valor * cantidad;
         }
@@ -225,6 +226,14 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla }) => {
     );
   };
 
+  useEffect(()=>{
+    let total = 0;
+    filasTabla.forEach((f)=>{
+      total = total + f.total;
+    })
+    setTotalVentas(total);
+  },[filasTabla]);
+  
   return (
     <div>
       <div className='flex '>
@@ -284,6 +293,9 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla }) => {
           })}
         </tbody>
       </table>
+      <label className='flex flex-col bg-gray-50 border border-gray-400 p-5 rounded-lg m-5'>
+          <span className='text-2xl font-gray-900'>Valor Total Venta: {totalVentas}</span>
+      </label>
     </div>
   );
 };
