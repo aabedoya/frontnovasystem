@@ -213,6 +213,7 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla }) => {
   };
 
   const modificarProducto = (producto, cantidad) => {
+    console.log(producto,cantidad);
     setFilasTabla(
       filasTabla.map((ft) => {
         if (ft._id === producto.id) {
