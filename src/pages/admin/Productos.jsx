@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import { nanoid } from 'nanoid';
 import { Dialog, Tooltip } from '@material-ui/core';
-import { obtenerProductos, crearProducto, editarProducto, eliminarProducto } from 'utils/api';
-import ReactLoading from 'react-loading';
-import 'react-toastify/dist/ReactToastify.css';
 import PrivateComponent from 'components/PrivateComponent';
+import { nanoid } from 'nanoid';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactLoading from 'react-loading';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { crearProducto, editarProducto, eliminarProducto, obtenerProductos } from 'utils/api';
 
 const Productos = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
