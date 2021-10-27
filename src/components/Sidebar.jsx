@@ -30,6 +30,9 @@ const Sidebar = () => {
         <PrivateComponent roleList={['admin']}>
           <Ruta icono='fas fa-user-shield' ruta='/admin/usuarios' nombre='Usuarios' />
         </PrivateComponent>
+        <PrivateComponent roleList={['admin']}>
+          <Ruta icono='fas fa-store' ruta='/admin/maestroventas' nombre='Maestro Ventas' />
+        </PrivateComponent>
       </div>
       <button onClick={() => cerrarSesion()}>Cerrar Sesión</button>
     </nav>

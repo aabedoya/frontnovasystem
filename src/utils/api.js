@@ -4,8 +4,7 @@ import axios from 'axios';
 const baseURL = 'https://sheltered-bastion-91143.herokuapp.com';
 
 const getToken = () => {
-  return `Bearer ${localStorage.getItem('token')}`;
-  
+  return `Bearer ${localStorage.getItem('token')}`;  
 };
 
 export const obtenerProductos = async (successCallback, errorCallback) => {
@@ -68,8 +67,7 @@ export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
     headers: {
       Authorization: getToken(), // 3. enviarle el token a backend
     },
-  };
-  console.log('obtiene datos del user');
+  };console.log('obtiene datos del user');
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
@@ -91,6 +89,36 @@ export const crearVenta = async (data, successCallback, errorCallback) => {
     url: `${baseURL}/ventas/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
+  };
+  await axios.request(options).then(successCallback).catch(errorCallback);
+};
+
+export const obtenerVentas = async (successCallback, errorCallback) => {
+  const options = {
+    method: 'GET',
+    url: `${baseURL}/ventas/`,
+    headers: {
+      Authorization: getToken(),
+    },
+  };
+  await axios.request(options).then(successCallback).catch(errorCallback);
+};
+
+export const editarVenta = async (id, data, successCallback, errorCallback) => {
+  const options = {
+    method: 'PATCH',
+    url: `${baseURL}/productos/${id}/`,
+    headers: { 'Content-Type': 'application/json', Authorization: getToken() },
+    data,
+  };
+  await axios.request(options).then(successCallback).catch(errorCallback);
+};
+
+export const eliminarVenta = async (id, successCallback, errorCallback) => {
+  const options = {
+    method: 'DELETE',
+    url: `${baseURL}/productos/${id}/`,
+    headers: { 'Content-Type': 'application/json', Authorization: getToken() },
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
